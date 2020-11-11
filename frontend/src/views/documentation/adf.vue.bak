@@ -1,0 +1,33 @@
+<template>
+  <div class="app-container documentation-container">
+    <pdf-viewer src="http://autochemistry.com/static/manuals/adf/ADF2019.pdf" style="float:left;margin-left:40px;" title="量子化学软件手册" />
+  </div>
+</template>
+
+<script>
+import pdfViewer from '@/components/Share/PDFViewer'
+
+export default {
+  name: 'Documentation',
+  components: { pdfViewer }
+}
+</script>
+
+<style lang="scss" scoped>
+.documentation-container {
+  margin: 40px;
+  .document-btn {
+    float: left;
+    margin-left: 40px;
+    display: block;
+    cursor: pointer;
+    background: black;
+    color: white;
+    height: 40px;
+    width: 200px;
+    line-height: 40px;
+    font-size: 20px;
+    text-align: center;
+  }
+}
+</style>
