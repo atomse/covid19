@@ -6,6 +6,8 @@ from django.http import HttpResponse
 from django.db.models import Q
 from .models import Covid19
 import pandas as pd
+from django.views.decorators.csrf import csrf_exempt
+
 
 COVID19_FILENAME = '/tmp/WHO-COVID-19-global-data.csv'
 
@@ -28,6 +30,7 @@ def get_all_countries():
     return sorted(countries)
 
 
+@csrf_exempt
 def all_countries(request):
     """
     docs
@@ -50,6 +53,7 @@ def all_date(request):
     return pack_data(20000, 'success', data)
 
 
+@csrf_exempt
 def date_range(request):
     """
     docs
@@ -76,13 +80,15 @@ def get_covid19_data(start_date=None, end_date=None, country=None):
         assert start_date <= end_date
     qset = Q(country__in=country)
     if start_date:
-        qset = qset & Q(date__gt=start_date)
+        qset = qset & Q(date__gte=start_date)
     if end_date:
-        qset = qset & Q(date__gt=end_date)
+        qset = qset & Q(date__lte=end_date)
     data = list(Covid19.objects.filter(qset).order_by('date').values())
     # import pdb; pdb.set_trace()
-    items = ["new_cases", "cumulative_cases",
-             "new_deaths", "cumulative_deaths"]
+    items = [
+        "cumulative_cases", "new_cases",
+        "cumulative_deaths", "new_deaths"
+    ]
     temp_df = pd.DataFrame(data)
     x_data = [_.strftime('%Y-%m-%d') for _ in temp_df['date'].tolist()]
     y_data = {}
@@ -104,8 +110,32 @@ def covid19(request):
     start_date = req_data.get("startDate", None)
     end_date = req_data.get("endDate", None)
     country = req_data.get("country", None)
+    # print(start_date, end_date, country)
     covid_data = get_covid19_data(start_date, end_date, country)
     return pack_data(20000, 'success', covid_data)
+
+
+def covid19_latest_numbers(request):
+    top_n = int(request.GET.get('topN', 10))
+    max_date = max(get_all_date())
+    qset = Q(date=max_date)
+    data = list(Covid19.objects.filter(
+        qset).order_by('-new_cases').values())
+    temp_df = pd.DataFrame(data)
+    x_data = temp_df['country'].tolist()
+    x_data = x_data[:top_n] + ['Others']
+    items = [
+        "cumulative_cases", "new_cases",
+        "cumulative_deaths", "new_deaths"
+    ]
+    y_data = {}
+    for i in items:
+        item_data = temp_df[i].tolist()
+        y_data[i] = item_data[:top_n] + [sum(item_data[top_n:])]
+    return pack_data(20000, 'success', {
+        'xData': x_data,
+        'yData': y_data
+    })
 
 
 def download_data():
@@ -135,12 +165,12 @@ def update_covid19(request):
         data = df.iloc[i]
         columns_values = [
             'Date_reported', 'Country_code', 'Country', 'WHO_region',
-            'New_cases', 'Cumulative_cases',
-            'New_deaths', 'Cumulative_deaths']
+            'Cumulative_cases', 'New_cases',
+            'Cumulative_deaths', 'New_deaths']
         db_headers = [
             "date", "country_code", "country", "who_region",
-            "new_cases", "cumulative_cases",
-            "new_deaths", "cumulative_deaths"]
+            "cumulative_cases", "new_cases",
+            "cumulative_deaths", "new_deaths"]
         date = data['Date_reported']
         country = data['Country']
         qset = Q(country=country, date=date)
@@ -150,4 +180,34 @@ def update_covid19(request):
             for dfi, dbi in zip(columns_values, db_headers):
                 kwargs[dbi] = data[dfi]
             Covid19.objects.create(**kwargs)
+    return pack_data(20000, 'success', 'success')
+
+
+@csrf_exempt
+def login(request):
+    """
+    docs
+    """
+    return pack_data(20000, 'success', {"token": "admin-token"})
+
+
+@csrf_exempt
+def userinfo(request):
+    """
+    docs
+    """
+    avatar_url = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif"
+    return pack_data(20000, 'success', {
+        "avatar": avatar_url,
+        "introduction": "I am a super administrator",
+        "name": "Super Admin",
+        "roles": ["admin"]
+    })
+
+
+@csrf_exempt
+def logout(request):
+    """
+    docs
+    """
     return pack_data(20000, 'success', 'success')

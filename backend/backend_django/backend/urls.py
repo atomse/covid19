@@ -23,5 +23,9 @@ urlpatterns = [
     path('api/v1/allDate', covid19.views.all_date),
     path('api/v1/dateRange', covid19.views.date_range),
     path('api/v1/covid19', covid19.views.covid19),
-    path('api/v1/update_covid19', covid19.views.update_covid19)
+    path('api/v1/covid19LatestNumbers', covid19.views.covid19_latest_numbers),
+    path('api/v1/update_covid19', covid19.views.update_covid19),
+    path('user/login', covid19.views.login),
+    path('user/info', covid19.views.userinfo),
+    path('user/logout', covid19.views.logout),
 ]
