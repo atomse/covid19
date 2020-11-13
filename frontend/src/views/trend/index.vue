@@ -31,6 +31,7 @@
                   type="date"
                   :placeholder="$t('trend.pickStartDate')"
                   :picker-options="startDatePickerOptions"
+                  value-format="yyyy-MM-dd"
                   @change="handleFormChange"
                 />
               </el-form-item>
@@ -43,6 +44,7 @@
                   type="date"
                   :placeholder="$t('trend.pickEndDate')"
                   :picker-options="endDatePickerOptions"
+                  value-format="yyyy-MM-dd"
                   @change="handleFormChange"
                 />
               </el-form-item>
@@ -94,15 +96,10 @@
         <span style="margin-left:10px;">{{ $t('trend.covidList') }}</span>
       </div>
 
-      <el-table 
-        :data="listData"
-                border fit highlight-current-row style="width: 100%;">
+      <el-table :data="listData" border fit highlight-current-row style="width: 100%;">
         <el-table-column :label="$t('trend.country')" prop="id" sortable min-width="80px">
           <template slot-scope="scope">
-            <img 
-              v-if="getImageUrl(scope.row.country_code)!=''"
-              width="30" height="20"
-              :src="getImageUrl(scope.row.country_code)" >
+            <img v-if="getImageUrl(scope.row.country_code)!=''" width="30" height="20" :src="getImageUrl(scope.row.country_code)">
             <span>{{ scope.row.country }}</span>
           </template>
         </el-table-column>
@@ -233,7 +230,7 @@ export default {
         disabledDate: time => {
           if (this.dateRange.min) {
             return (
-              time.getTime() < new Date(this.dateRange.min).getTime()
+              time.getTime() < new Date(this.dateRange.min).getTime() - 24 * 60 * 60 * 1000
             )
           }
         }
@@ -357,12 +354,13 @@ export default {
       //   return temp[j] - temp[i]
       // })
       var xData = []
-      for (var i = 0; i < temp.length; i++) {
+      var i = 0
+      for (i = 0; i < temp.length; i++) {
         xData.push(data.xData[i])
       }
       // cdata, xData sort together
       var yData = []
-      for (var i = 0; i < topN; i++) {
+      for (i = 0; i < topN; i++) {
         yData.push({
           name: xData[i],
           value: cdata[i]
