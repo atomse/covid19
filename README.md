@@ -46,21 +46,43 @@ df.columns = [_.strip() for _ in df.columns.values]
 ```
 
 
+### 数据库
+
+
+* Covid19:
+    - 每天每个国家的数据
+    - keys: date, country, country_code, who_region, new_cases, cumulative_cases, new_deaths, cumulative_deaths
+* Covid19Country:
+    - 所有的国家名称、国家的代号
+    - keys: country, country_code
+* Covid19Latest:
+    - 所有的国家最近一次的数据
+    - keys: country, country_code, who_region, new_cases, cumulative_cases, new_deaths, cumulative_deaths
+* Covid19Date:
+    - covid19数据日期的起止
+    - keys: min_date, max_date
+
+
 ### 后端
 
 后端使用Django构架，Sqlite3作为数据库，使用Restful接口，给出的资源有
 
-```
-/api/v1/allCountries: 所有国家的名称，GET
 
-/api/v1/dateRange: 日期的最大、最小值，GET
+* /api/v1/allCountries
+    - 所有国家的名称，GET
+    - 获取`Covid19Country`的数据
+* /api/v1/dateRange
+    - 日期的最大、最小值，GET
+    - 获取`Covid19Date`的数据
+* /api/v1/covid19
+    - Covid19 数据
+    - 获取`Covid19`的数据
+    - params = {country: "country", startDate: "startDate", endDate: "endDate"}
+* /api/v1/covid19LatestNumbers
+    - Covid19 各国最新数据
+    - 获取`Covid19Latest`的数据
+    - params = {'topN': 只显示top N的数据, 其他作为Others求和}
 
-/api/v1/covid19: Covid19 数据
-    params = {country: "country", startDate: "startDate", endDate: "endDate"}
-
-/api/v1/covid19LatestNumbers: Covid19 各国最新数据
-    params = {'topN': 只显示top N的数据, 其他作为Others求和}
-```
 
 ### 前端
 
