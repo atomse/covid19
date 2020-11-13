@@ -15,7 +15,10 @@
 https://covid19.atomse.net/
 
 ![](covid19.png)
-  
+![](covid19-2.png)
+![](covid19-3.png)
+
+
 ## 项目方案
 
 我们选择了提供
@@ -87,7 +90,7 @@ df.columns = [_.strip() for _ in df.columns.values]
 ### 前端
 
 
-在vue-element-admin的基础上修改，完成了三个功能，包括:
+在[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)的基础上修改，完成了三个功能，包括:
 * 各国在一定时间段内的`每日新增确诊/死亡病例，累计确诊/死亡数据`查询与可视化
 * 最新各个国家`每日新增确诊/死亡病例，累计确诊/死亡数据`的占比
 * 最新各个国家`每日新增确诊/死亡病例，累计确诊/死亡数据`的列表显示
