@@ -12,7 +12,7 @@ import pandas as pd
 from django.http import HttpResponse
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
-from .models import Covid19
+from .models import Covid19, Covid19Country, Covid19Latest, Covid19Date
 
 
 def pack_data(code, msg, data):
@@ -30,8 +30,8 @@ def get_all_countries():
     """
     get all countries names from db
     """
-    countries = Covid19.objects.all().values('country')
-    countries = list(set([_['country'] for _ in countries]))
+    countries = list(Covid19Country.objects.all().values())
+    countries = [_['country'] for _ in countries]
     # import pdb; pdb.set_trace()
     return sorted(countries)
 
@@ -54,12 +54,12 @@ def get_all_date():
     return sorted(data)
 
 
-def all_date(request):
-    """
-    response /api/v1/allDate request
-    """
-    data = get_all_date()
-    return pack_data(20000, 'success', data)
+def get_min_max_date():
+    obj = Covid19Date.objects.filter(id=1).values()
+    obj = list(obj)[0]
+    min_date = obj['min_date'].strftime('%Y-%m-%d')
+    max_date = obj['max_date'].strftime('%Y-%m-%d')
+    return min_date, max_date
 
 
 @csrf_exempt
@@ -67,10 +67,10 @@ def date_range(request):
     """
     response /api/v1/dateRange request
     """
-    date = get_all_date()
+    min_date, max_date = get_min_max_date()
     return pack_data(20000, 'success', {
-        'min': min(date),
-        'max': max(date)
+        'min': min_date,
+        'max': max_date,
     })
 
 
@@ -144,17 +144,14 @@ def covid19_latest_numbers(request):
     top_n = request.GET.get('topN', None)
     if top_n:
         top_n = int(top_n)
-    print(top_n)
-    max_date = max(get_all_date())
-    qset = Q(date=max_date)
-    data = list(Covid19.objects.filter(
-        qset).order_by('-cumulative_cases').values())
+    # import pdb; pdb.set_trace()
+    data = list(Covid19Latest.objects.all().order_by('-cumulative_cases').values())
     temp_df = pd.DataFrame(data)
     x_data = temp_df['country'].tolist()
     country_code = temp_df['country_code'].tolist()
     if top_n:
         x_data = x_data[:top_n] + ['Others']
-        country_code = country_code[:top_n] + ['Other']
+        country_code = country_code[:top_n] + ['Others']
     items = [
         "cumulative_cases", "new_cases",
         "cumulative_deaths", "new_deaths",

@@ -20,7 +20,7 @@ import covid19.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/allCountries', covid19.views.all_countries),
-    path('api/v1/allDate', covid19.views.all_date),
+    # path('api/v1/allDate', covid19.views.all_date),
     path('api/v1/dateRange', covid19.views.date_range),
     path('api/v1/covid19', covid19.views.covid19),
     path('api/v1/covid19LatestNumbers', covid19.views.covid19_latest_numbers),

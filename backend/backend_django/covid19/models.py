@@ -12,10 +12,30 @@ class Covid19(models.Model):
     2020-01-05,AF,Afghanistan,EMRO,0,0,0,0
     """
     date = models.DateField()
-    country_code = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
+    country_code = models.CharField(max_length=50)
     who_region = models.CharField(max_length=50)
     new_cases = models.IntegerField()
     cumulative_cases = models.IntegerField()
     new_deaths = models.IntegerField()
     cumulative_deaths = models.IntegerField()
+
+
+class Covid19Country(models.Model):
+    country = models.CharField(max_length=50)
+    country_code = models.CharField(max_length=50)
+
+
+class Covid19Latest(models.Model):
+    country = models.CharField(max_length=50)
+    country_code = models.CharField(max_length=50)
+    who_region = models.CharField(max_length=50)
+    new_cases = models.IntegerField()
+    cumulative_cases = models.IntegerField()
+    new_deaths = models.IntegerField()
+    cumulative_deaths = models.IntegerField()
+
+
+class Covid19Date(models.Model):
+    min_date = models.DateField()
+    max_date = models.DateField()
