@@ -53,8 +53,6 @@ df.columns = [_.strip() for _ in df.columns.values]
 ```
 /api/v1/allCountries: 所有国家的名称，GET
 
-/api/v1/allDate: 所有可用的日期，GET
-
 /api/v1/dateRange: 日期的最大、最小值，GET
 
 /api/v1/covid19: Covid19 数据
