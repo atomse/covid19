@@ -58,7 +58,7 @@ df.columns = [_.strip() for _ in df.columns.values]
 /api/v1/covid19: Covid19 数据
     params = {country: "country", startDate: "startDate", endDate: "endDate"}
 
-api/v1/covid19LatestNumbers: Covid19 各国最新数据
+/api/v1/covid19LatestNumbers: Covid19 各国最新数据
     params = {'topN': 只显示top N的数据, 其他作为Others求和}
 ```
 
