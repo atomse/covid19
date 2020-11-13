@@ -189,9 +189,20 @@ export default {
     pickStartDate: 'Please pick start date',
     endDate: 'End Date',
     pickEndDate: 'Please pick end date',
-    New_cases: 'New Cases',
-    Cumulative_cases: 'Cumulative Cases',
-    New_deaths: 'New Deaths',
-    Cumulative_deaths: 'Cumulative Deaths'
+    new_cases: 'New Cases',
+    cumulative_cases: 'Cumulative Cases',
+    new_deaths: 'New Deaths',
+    cumulative_deaths: 'Cumulative Deaths',
+    countryRatio: 'Ratio of countries',
+    type: 'Type',
+    China: 'China',
+    US: 'United States',
+    India: 'India',
+    topN: 'Top N',
+    covidList: 'Covid19 List Data',
+    covidTrend: 'Covid19 Trend',
+    covidRatio: 'Covid19 Ratio',
+    success: 'Success',
+    loadSuccess: 'Load Covid19 successfully'
   }
 }

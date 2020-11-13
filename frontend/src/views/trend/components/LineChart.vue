@@ -7,6 +7,8 @@ import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 
+const colorOptions = ['#DC143C', '#FFD700', '#00FF00', '#00CED1', '#1E90FF', '#FF00FF', '#FF1493', '#696969', '#D2691E', '#00BFFF', '#20B2AA', '#2E8B57']
+
 export default {
   mixins: [resize],
   props: {
@@ -95,7 +97,7 @@ export default {
         })
       }
     },
-    setOptions({ xData, yData, titleString } = {}) {
+    setOptions({ xData, yData, yAxis, yMax, titleString } = {}) {
       this.chart = this.chart.dispose()
       this.chart = echarts.init(this.$el, 'macarons')
       this.chart.setOption({
@@ -162,12 +164,36 @@ export default {
           },
           data: xData
         },
-        yAxis: {
-          axisTick: {
-            show: false
+        yAxis: [
+          {
+            type: 'value',
+            axisTick: {
+              show: false
+            },
+            min: 0,
+            max: yMax[0],
+            axisLine: {
+              lineStyle: {
+                color: colorOptions[0]
+              }
+            },
+            position: 'left'
           },
-          min: 0
-        },
+          {
+            type: 'value',
+            axisTick: {
+              show: false
+            },
+            min: 0,
+            max: yMax[1],
+            axisLine: {
+              lineStyle: {
+                color: colorOptions[1]
+              }
+            },
+            position: 'right'
+          }
+        ],
         dataZoom: [{
           show: true,
           height: 30,
@@ -196,8 +222,7 @@ export default {
         series: (function() {
           const defaultAnimationDuration = 2000
           const defaultSmooth = true
-          const defaultChartType = 'line'
-          const colorOptions = ['#DC143C', '#FFD700', '#00FF00', '#00CED1', '#1E90FF', '#FF00FF', '#FF1493', '#696969', '#D2691E', '#00BFFF', '#20B2AA', '#2E8B57']
+          // const defaultChartType = 'line'
           const lineColorOptions = colorOptions
           const animationEasingOptions = ['cubicInOut', 'quadraticOut']
           const defaultLineWidth = 2
@@ -217,8 +242,10 @@ export default {
             seriesList.push({
               name: _name,
               smooth: defaultSmooth,
-              type: defaultChartType,
+              // type: defaultChartType,
               symbol: 'none',
+              type: yAxis[_name]['type'],
+              yAxisIndex: yAxis[_name]['yAxisIndex'],
               symbolSize: 10,
               itemStyle: {
                 normal: {

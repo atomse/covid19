@@ -32,3 +32,10 @@ export function fetchCovidID19Data(query) {
   })
 }
 
+export function fetchCovid19LatestNumbers(query) {
+  return request({
+    url: '/api/v1/covid19LatestNumbers',
+    method: 'get',
+    params: query
+  })
+}

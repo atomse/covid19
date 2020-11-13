@@ -189,9 +189,20 @@ export default {
     pickStartDate: '请选择开始日期',
     endDate: '结束日期',
     pickEndDate: '请选择结束日期',
-    New_cases: '新增确诊病例',
-    Cumulative_cases: '累计确诊病例',
-    New_deaths: '新增死亡',
-    Cumulative_deaths: '累计死亡'
+    new_cases: '新增确诊病例',
+    cumulative_cases: '累计确诊病例',
+    new_deaths: '新增死亡',
+    cumulative_deaths: '累计死亡',
+    countryRatio: '各国比例',
+    type: '类型',
+    China: '中国',
+    US: '美国',
+    India: '印度',
+    topN: 'Top N',
+    covidList: '新冠数据列表',
+    covidTrend: '新冠趋势',
+    covidRatio: '新冠占比',
+    success: '成功',
+    loadSuccess: '加载Covid19数据成功'
   }
 }

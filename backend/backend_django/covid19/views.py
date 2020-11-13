@@ -147,6 +147,7 @@ def covid19_latest_numbers(request):
     top_n = request.GET.get('topN', None)
     if top_n:
         top_n = int(top_n)
+    print(top_n)
     max_date = max(get_all_date())
     qset = Q(date=max_date)
     data = list(Covid19.objects.filter(
@@ -195,7 +196,10 @@ def update_covid19(request):
     """
     download_data()
     who_file_path = COVID19_FILENAME
-    covid_df = pd.read_csv(who_file_path)
+    dtype = {
+        'Country_code': str,
+    }
+    covid_df = pd.read_csv(who_file_path, dtype=dtype)
     covid_df.columns = [_.strip() for _ in covid_df.columns.values]
     max_date = get_all_date()[-5]
     covid_df = covid_df.loc[covid_df.Date_reported > max_date]

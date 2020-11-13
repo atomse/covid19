@@ -148,7 +148,6 @@ export default {
           handleSize: '110%',
           handleStyle: {
             color: '#d3dee5'
-
           },
           textStyle: {
             color: '#fff' },
