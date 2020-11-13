@@ -64,18 +64,6 @@ api/v1/covid19LatestNumbers: Covid19 各国最新数据
     params = {'topN': 只显示top N的数据, 其他作为Others求和}
 ```
 
-另外，我们加入了定时更新功能，如果发现当前UTC日期超过了现有数据的最大时间，那么就在后台重新下载并更新当前数据文件。
-
-```
-/control/update_covid19: 立即重新下载WHO的Covid19数据并更新数据库
-```
-
-可以使用`crontab`每小时定时更新
-
-```text
-0 * * * * curl localhost:8000/control/update_covid19 > /dev/null 2>&1
-```
-
 ### 前端
 
 
@@ -150,3 +138,22 @@ echarts读取相关的数据并绘图，其中x轴数据较多，使用
         proxy_pass http://localhost:8080;
     }
 ```
+
+### 更新
+
+
+另外，我们加入了更新命令
+
+执行
+
+`python3 $DJANGO_PATH/manage.py  shell -c 'import covid19.update; covid19.update.update_covid19()'`
+
+其中`$DJANGO_PATH/manage.py` 为 django项目中的`manage.py`的绝对路径，如果需要定时更新，可以使用crontab即可，将
+
+```0 * * * * python3 $DJANGO_PATH/manage.py  shell -c 'import covid19.update; covid19.update.update_covid19()'```
+
+加入`crontab -e`中
+
+
+
+
