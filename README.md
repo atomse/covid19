@@ -70,10 +70,10 @@ api/v1/covid19LatestNumbers: Covid19 各国最新数据
 /control/update_covid19: 立即重新下载WHO的Covid19数据并更新数据库
 ```
 
-可以使用`crontab`定时更新
+可以使用`crontab`每小时定时更新
 
 ```text
-0 0 * * * curl localhost:8000/control/update_covid19 > /dev/null 2>&1
+0 * * * * curl localhost:8000/control/update_covid19 > /dev/null 2>&1
 ```
 
 ### 前端
